@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, Application } from "express";
+import express, { Application } from "express";
 import dotEnv from "dotenv";
 import cookieParser from "cookie-parser";
 
@@ -6,6 +6,7 @@ import AuthRouter from "./router/auth.router";
 import NotFoundHandlers from "./common/exception/notfound-handler";
 import AllExceptionHandler from "./common/exception/all-exception.handler";
 import UserRouter from "./router/user.router";
+import CategoryRouter from "./router/category.router";
 
 dotEnv.config();
 
@@ -22,8 +23,11 @@ async function main() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
+  // app router
   app.use("/api/auth", AuthRouter);
   app.use("/api/user", UserRouter);
+  app.use("/api/category", CategoryRouter);
+
   NotFoundHandlers(app);
   AllExceptionHandler(app);
 
