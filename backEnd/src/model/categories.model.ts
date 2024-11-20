@@ -1,4 +1,5 @@
-import { Schema, Types, model } from "mongoose";
+import { NextFunction } from "express";
+import { Query, Schema, Types, model } from "mongoose";
 
 const CategoriesSchema = new Schema<any>(
   {
@@ -8,12 +9,11 @@ const CategoriesSchema = new Schema<any>(
     parent: { type: Types.ObjectId, ref: "Category", required: false },
     parents: {
       type: [Types.ObjectId],
-      ref: "Category",
       required: false,
       default: [],
     },
   },
-  { virtuals: true, versionKey: false, id: false }
+  { toJSON: { virtuals: true }, versionKey: false, id: false }
 );
 
 CategoriesSchema.virtual("children", {
@@ -22,7 +22,16 @@ CategoriesSchema.virtual("children", {
   foreignField: "parent",
 });
 
+function autoPopulate(this: Query<any, Document>, next: NextFunction) {
+  this.populate([{ path: "children" }]);
+  next();
+}
+
+(CategoriesSchema as any)
+  .pre("find", autoPopulate)
+  .pre("findOne", autoPopulate);
+
 // Create the model
-const CategoriesModel = model<any>("category", CategoriesSchema);
+const CategoriesModel = model<any>("Category", CategoriesSchema);
 
 export default CategoriesModel;

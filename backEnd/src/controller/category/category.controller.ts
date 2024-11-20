@@ -26,6 +26,7 @@ class CategoryController {
   }
 
   async find(req: Request, res: Response, next: NextFunction) {
+    console.log("GET->CATEGORY::CALLEDS");
     try {
       const categories = await this.#service.find();
 
