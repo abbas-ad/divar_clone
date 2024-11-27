@@ -9,6 +9,7 @@ import AllExceptionHandler from "./common/exception/all-exception.handler";
 import UserRouter from "./router/user.router";
 import CategoryRouter from "./router/category.router";
 import NavigationRouter from "./router/navigations.router";
+import UploadRouter from "./router/upload.router";
 
 dotEnv.config();
 
@@ -36,6 +37,7 @@ async function main() {
   app.use("/api/user", UserRouter);
   app.use("/api/category", CategoryRouter);
   app.use("/api/navigation", NavigationRouter);
+  app.use("/api/upload", UploadRouter);
 
   NotFoundHandlers(app);
   AllExceptionHandler(app);
