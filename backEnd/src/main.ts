@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import dotEnv from "dotenv";
 import cookieParser from "cookie-parser";
 var cors = require("cors");
+const path = require("path");
 
 import AuthRouter from "./router/auth.router";
 import NotFoundHandlers from "./common/exception/notfound-handler";
@@ -28,10 +29,12 @@ async function main() {
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // برای کوکی‌ها و احراز هویت
   };
+  
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
+  app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
   // app router
   app.use("/api/auth", AuthRouter);
   app.use("/api/user", UserRouter);
